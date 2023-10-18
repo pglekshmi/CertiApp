@@ -1,10 +1,18 @@
 import {useState,useEffect} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Front(){
-const [text, setText] = useState();
+const [ID, setID] = useState();
+const navigate = useNavigate();
+
 function handleChange(event){
-  setText(event.target.value);
+  setID(event.target.value);
+}
+async function handleSearch(event){
+  const result = await fetch(`http://127.0.0.1:8000/view?id=${ID}`);
+  const data = await result.json();
+  console.log(data)
+  navigate('/view',{state:{data}})
 }
 return(
   <div className='flex flex-col h-screen'>
@@ -18,12 +26,12 @@ return(
     <input
         className="border-2 border-black mb-6"
         type="text"
-        value={text}
+        value={ID}
         onChange={handleChange}
         placeholder="Enter text here"
         
       />
-      <button className='border-solid bg-teal-700  hover:bg-cyan-500 text-white px-8 rounded'>Submit</button>
+      <button onClick={handleSearch} className='border-solid bg-teal-700  hover:bg-cyan-500 text-white px-8 rounded'>Search</button>
     </div>
     </div>
     

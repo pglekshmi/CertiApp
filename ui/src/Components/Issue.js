@@ -2,12 +2,37 @@ import {useState,useEffect} from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Issue(){
-    const [ID, setID] = useState();
-    const [Name, setName] = useState();
-    const [CName, setCName] = useState();
-    const [Grade, setGrade] = useState();
-    const [Date, setDate] = useState();
-    
+    const [ID, setID] = useState('');
+    const [Name, setName] = useState('');
+    const [CName, setCName] = useState('');
+    const [Grade, setGrade] = useState('');
+    const [Date, setDate] = useState('');
+    // const [isMounted, setIsMounted] = useState(false);
+    const [formData, setformData] = useState(null);
+    useEffect(()=>{ var jsonData = {
+      CertID: ID,
+      CandName: Name,
+      CourseName: CName,
+      Grade: Grade,
+      Date: Date,
+  }
+  console.log(jsonData.CertID)
+  setformData(jsonData)
+  // setIsMounted(true)
+},[ID, Name, CName, Grade, Date]);
+    async function handleButton(){
+      
+      // console.log(jsonData);
+      
+      console.log(formData)
+      let result = await fetch("http://127.0.0.1:8000/issue",{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData)
+      })
+    }
      
     return(
         <div className='flex flex-col h-screen'>
@@ -74,7 +99,7 @@ export default function Issue(){
       
       </div>
       <div className='flex flex-col justify-center items-center h-screen text-center'>
-      <button className=' border-solid bg-teal-700  hover:bg-cyan-500 text-white px-8 rounded'>Submit</button>
+      <button onClick={handleButton} className=' border-solid bg-teal-700  hover:bg-cyan-500 text-white px-8 rounded'>Submit</button>
       </div></div>
     )
 }
