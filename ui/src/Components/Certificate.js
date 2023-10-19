@@ -8,7 +8,7 @@ export default function Certificate(){
         <div>
         <p className="text-right italic">{data.CertID}</p><br></br><br></br>
         <p className="text-center text-4xl font-mono">Kerala Blockchain Academy</p><br></br><br></br><br></br>
-        <p className="text-center font-sans ">This is to certify that {data.CandName} has successfully completed {data.CourseName} with {data.Grade} on {data.Date}</p>
+        <p className="text-center font-sans ">This is to certify that {data.CandName}<br></br> has successfully completed {data.CourseName}<br></br> with {data.Grade} on {data.Date}</p>
         </div>
     )
 }
