@@ -21,6 +21,7 @@ export default function Issue(){
   // setIsMounted(true)
 },[ID, Name, CName, Grade, Date]);
     async function handleButton(){
+
       
       // console.log(jsonData);
       
@@ -32,6 +33,13 @@ export default function Issue(){
         },
         body: JSON.stringify(formData)
       })
+    console.log(result)
+    if(result.status == 201){
+      alert(`${ID} added`)
+    }
+    else
+    alert("Check the details")
+    
     }
      
     return(
