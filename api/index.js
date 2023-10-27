@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 
 const listen_port = 8000
 mongoose.connect(
-    "mongodb://localhost:27017/CertiDapp",
+    "mongodb://mongodb:27017/CertiDapp?authSource=admin",
 );
 const database = mongoose.connection;
 database.on("error", (error) => {
