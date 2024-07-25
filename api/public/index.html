@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- <script>
+        getCertificateDetails = async() =>{
+    let certificateID =  document.getElementById("certificateID").value;
+    const data = await contractObj.methods.certificateDetails(certificateID).call();
+    console.log(data);
+    localStorage.setItem("certificateID",certificateID);
+    localStorage.setItem("courseName",data.courseName);
+    localStorage.setItem("candidateName",data.candidatename);
+    localStorage.setItem("grade",data.grade);
+    localStorage.setItem("date",data.date);
+
+   window.location.href = "viewCertificate.html";
+}
+    </script> -->
+    <script src="./app.js"></script>
+    <link rel='stylesheet' href='stylesheets/style.css' />
+    <link rel='stylesheet' href='stylesheets/searchStyle.css' />
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> -->
+</head>
+
+<body>
+    <div class="header">
+        
+        <h1 style="text-align: center;">Certificate Dapp</h1>
+        <div class="right-corner-component">
+            <a class="active" href="index.html">Home</a>
+            <a href="issueCertificate.html">Issue Certificate</a>
+        </div>
+    </div>
+    <div style="text-align:center">
+        <br /><br />
+        <img src="Logo.png" width="200" height="200">
+        <br /><br /><br />
+        <!-- <button onclick="connectToMetamask()" class="buttonZero" style="text-align: center;">
+            <span>Login</span>
+        </button> -->
+    </div>
+    <div class="search" >
+        <input type="text" id="certificateID" name="certificateID" class="text-box-with-border"
+            placeholder="Enter Certificate ID to View">
+        <button  class="searchButton" onclick="redirectToPage()">
+            Search
+        </button>
+        <button class="searchButton" onclick="updatePage()">Update</button>
+        <button class="searchButton" onclick="deletePage()">Delete</button>
+        <script>
+            async function redirectToPage() {
+                const id=document.getElementById("certificateID").value;
+                // window.location.href= `http://127.0.0.1:8000/view/${id}`;
+               await fetch(`http://127.0.0.1:8000/view/${id}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        // console.log(response);
+                        return response.json();
+                        })
+                        .then(data => {
+                        console.log('Success:', data);
+                        const {courseName,candidateName,grade,date}=data;
+                        localStorage.setItem('certificateID',id)
+                        localStorage.setItem('courseName',courseName);
+                        localStorage.setItem('candidateName',candidateName);
+                        localStorage.setItem('grade',grade);
+                        localStorage.setItem('date',date)
+                        })
+                        .catch(error => {
+                        console.error('Error:', error);
+                        });
+                        window.location.href="viewCertificate1.html";
+            
+                
+        }
+        async function updatePage(){
+            const id=document.getElementById("certificateID").value;
+                // window.location.href= `http://127.0.0.1:8000/view/${id}`;
+               await fetch(`http://127.0.0.1:8000/view/${id}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        // console.log(response);
+                        return response.json();
+                        })
+                        .then(data => {
+                        console.log('Success:', data);
+                        const {courseName,candidateName,grade,date}=data;
+                        localStorage.setItem('certificateID',id)
+                        localStorage.setItem('courseName',courseName);
+                        localStorage.setItem('candidateName',candidateName);
+                        localStorage.setItem('grade',grade);
+                        localStorage.setItem('date',date)
+                        })
+                        .catch(error => {
+                        console.error('Error:', error);
+                        });
+                        window.location.href="updateCertificate.html";
+
+        }
+        function deletePage(){
+            const id=document.getElementById("certificateID").value;
+            fetch(`http://127.0.0.1:8000/delete/${id}`)
+            .then(response=>{
+                if(!response.ok){
+                  res.status(502).json({message:'Invalid response'})
+                }
+                return response.json()
+            })
+            .then(data=>{
+                console.log('Sucess',data.msg);
+                if(data.msg=='delete'){
+                    localStorage.clear();
+                }
+            })
+            .catch(error=>{
+                console.log('error',error)
+            })
+        }
+
+            
+        </script>
+    </div>
+</body>
+
+</html>
