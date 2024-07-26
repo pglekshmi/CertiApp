@@ -9,13 +9,18 @@ router.get('/', (req, res) => {
 router.post('/issue', async (req, res) => {
     try {
 
+
         const { certificateID, courseName, candidateName, grade, date } = req.body;
         console.log(certificateID);
-
-        certDetails.set(certificateID, { courseName, candidateName, grade, date });
-        console.log(certDetails.get(certificateID));
-        // const result = await CertiDetails.create(data);
-        res.status(201).json({ message: 'saved' })
+        if (certDetails.has(certificateID)) {
+            res.status(201).json({ message: `${certificateID} already exist` })
+        }
+        else {
+            certDetails.set(certificateID, { courseName, candidateName, grade, date });
+            console.log(certDetails.get(certificateID));
+            // const result = await CertiDetails.create(data);
+            res.status(201).json({ message: 'Certificate details saved' })
+        }
     } catch (error) {
         console.log(error);
         res.status(500).json();
@@ -41,13 +46,14 @@ router.get('/view/:id', async (req, res) => {
 })
 router.post('/update', (req, res) => {
     try {
+        console.log("hello");
         const { certificateID, courseName, candidateName, grade, date } = req.body;
         console.log(certificateID);
 
         certDetails.set(certificateID, { courseName, candidateName, grade, date });
         // console.log(certDetails.get(certificateID));
         // const result = await CertiDetails.create(data);
-        res.status(201).json({ message: 'saved' })
+        res.status(201).json({ message: `${certificateID} details updated` })
     } catch (error) {
         console.log(error);
         res.status(500).json();
@@ -57,8 +63,13 @@ router.post('/update', (req, res) => {
 router.get('/delete/:id', (req, res) => {
     const id1 = req.params.id;
     console.log(id1);
+    console.log(certDetails.get(id1));
     certDetails.delete(id1);
-    res.status(205).json({ msg: 'delete' })
+    console.log(certDetails.get(id1));
+    const msg = `${id1} details deleted`;
+    console.log(msg);
+    res.status(200).send("deleted")
+    // res.status(205).json({ message: "details deleted"})
     // res.send({msg:'delete'});
 })
 export default router;

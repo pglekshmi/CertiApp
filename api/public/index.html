@@ -108,12 +108,14 @@
                 if(!response.ok){
                   res.status(502).json({message:'Invalid response'})
                 }
-                return response.json()
+                console.log(response);
+                return response.json();
             })
             .then(data=>{
-                console.log('Sucess',data.msg);
-                if(data.msg=='delete'){
+                console.log('Sucess',data);
+                if(data.message){
                     localStorage.clear();
+                    // alert(data.msg)
                 }
             })
             .catch(error=>{

@@ -37,7 +37,7 @@
   <div class="entry-form">
     <h3>Update  Certificate</h3>
     
-    <form action="http://127.0.0.1:8000/update" method="POST">
+    <!-- <form action="http://127.0.0.1:8000/update" method="POST"> -->
     <div class="form-group">
       <label style="display: block" for="courseName">Select Course *</label>
       <select class="form-ctrl" name="courseName" id="courseName">
@@ -70,8 +70,45 @@
       <label style="display: block" for="date">Issue Date *</label>
       <input type="date" class="form-ctrl" id="date" name="date" required>
     </div>
-    <button class="btn btn-info">Issue Certificate</button>
-  </div></form>
+    <input type="submit" class="btn btn-info" onclick="handleForm()" value="Update Certificate">
+  </div>
+  <script>
+  function handleForm(){
+    console.log("hello");
+    const certificateID = document.getElementById('certificateID').value;
+    const courseName = document.getElementById('courseName').value;
+    const candidateName = document.getElementById('candidateName').value;
+    const grade = document.getElementById('grade').value;
+    const date = document.getElementById('date').value;
+    const data={
+         certificateID:certificateID,
+         courseName:courseName,
+         candidateName:candidateName,
+         grade:grade,
+         date:date
+    }
+    const newCertificate = JSON.stringify(data);
+    
+   fetch('http://127.0.0.1:8000/update',{
+     method:'POST',
+     headers:{
+       'Content-Type':'application/json'
+     },
+     body:newCertificate
+   })
+   .then(response=>{
+     if(!response.ok){
+        res.status(500).json({message:'Network error occured'});
+     }
+     console.log(response);
+     return response.json();
+   })
+   .then(data=>{
+     console.log('suceess',data);
+     alert(data.message)
+   })
+   }
+  </script>
 </body>
 
 </html>
