@@ -3,7 +3,25 @@
 
 <head>
 
-  <script src="/html-css/app.js"></script>
+  <script >issueCertificate =async() =>{
+    let courseName = document.getElementById("courseName").value;
+    let certificateID= document.getElementById("certificateID").value;
+    let candidateName = document.getElementById("candidateName").value;
+    let grade = document.getElementById("grade").value;
+    let date = document.getElementById("date").value;
+   //  const infoValue = await contractObj.methods.newCertificate(certificateID,courseName,candidateName,grade,date).send({from:ethereum.selectedAddress});
+   //  console.log(infoValue);
+       localStorage.setItem("certificateID",certificateID);
+       localStorage.setItem("courseName",courseName);
+       localStorage.setItem("candidateName",candidateName);
+       localStorage.setItem("grade",grade);
+       localStorage.setItem("date",date);
+   
+   
+    alert(certificateID+" is issued");
+   }
+   </script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.12.1/ethers.umd.min.js"></script> -->
   <meta charset="UTF-8">
   <title>Issue Certificate</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"

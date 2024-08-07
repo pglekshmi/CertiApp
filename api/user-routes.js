@@ -40,6 +40,7 @@ router.get('/view/:id', async (req, res) => {
         res.json(details);
     }
     else {
+        localStorage.clear();
         res.status(404).json({ message: 'details not found' });
     }
 
@@ -68,8 +69,8 @@ router.get('/delete/:id', (req, res) => {
     console.log(certDetails.get(id1));
     const msg = `${id1} details deleted`;
     console.log(msg);
-    res.status(200).send("deleted")
-    // res.status(205).json({ message: "details deleted"})
+    
+    res.status(200).json({ message: `${id1} details deleted`})
     // res.send({msg:'delete'});
 })
 export default router;
