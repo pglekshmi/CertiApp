@@ -1,141 +1,134 @@
-import { useState,useEffect } from "react";
-import {BrowserProvider,Contract} from 'ethers';
-import abi  from './Cert.json'
-import address from './deployed_addresses.json';
+import { useState } from 'react'
+import {BrowserProvider, Contract}  from 'ethers'
 
+import './App.css'
+
+import cert from './cert.json'
 
 function App() {
 
-  const [formData,setFormData] = useState({
-    ID:0,
-    Name:'',
-    Course:'',
-    Grade:'',
-    Date:''
-  });
+  const [formData,setFormData]=useState({
+    cid:0,
+    cname:'',
+    course:'',
+    grade:'',
+    date:''
+  })
 
-  const [output,setOutput] = useState("");
-  
-  const provider = new BrowserProvider(window.ethereum);
-  async function connectMetamask(){
+  const [output,setOutput] = useState('')
+  const connectMetamask =async()=>{
+
+    const provider =await  new BrowserProvider(window.ethereum)
+    console.log("Provider",provider);
     const signer = await provider.getSigner();
-    console.log(signer.address);
+    console.log("Signer",signer.address);
     
-    alert(`${signer.address} successfully logged in`);
-  
+    
   }
 
-  function handleChange(event){
+  const handleChange = (event)=>{
     const {name,value} = event.target;
-    setFormData((prevState)=>({...prevState,[name]:value }))
-    console.log(formData);
+    console.log("Name",name);
+    console.log("Value",value);
+    
+    
+    setFormData((prev)=>({...prev,[name]:value}))
+  }
+
+  const IssueCertificate =async()=>{
+     const provider =await  new BrowserProvider(window.ethereum)
+    console.log("Provider",provider);
+    const signer = await provider.getSigner();
+    console.log("Signer",signer.address);
+
+    console.log("Certificate Details",formData);
+
+    const cInstance = new Contract(cert.address,cert.abi,signer);
+
+    const tranHash = await cInstance.issueCertificate(formData.cid,formData.cname,formData.course,formData.grade,formData.date)
+    console.log("Transaction Hash",tranHash);
     
     
   }
 
-  async function handleForm(event){
-     event.preventDefault();
-     console.log("Hi");
-     console.log(formData);
-     
-     const ABI=abi.abi;
-     const add = address["CertModule#Cert"];
-     const signer =  await provider.getSigner();
-     console.log(signer);
-     
-     
-     const instance = new Contract(add,ABI,signer);
-     console.log(instance);
+  const getCertificate =async()=>{
 
-     const receipt1 = await instance.issue(formData.ID,
-                                          formData.Name,
-                                          formData.Course,
-                                          formData.Grade,
-                                          formData.Date
-     );
-     
-     console.log(receipt1);
-     resetForm();
-     
-  }
-
-  function resetForm(){
-    setFormData({ID:0,
-      Name:'',
-      Course:'',
-      Grade:'',
-      Date:''})
-      document.getElementById("ID").value='';
-      document.getElementById("Name").value='';
-      document.getElementById("Course").value='';
-      document.getElementById("Date").value='';
-  }
-
-  async function getCertificate(){
-    const queryId = document.getElementById("queryId").value;
-    console.log(queryId);
-
-    const ABI=abi.abi;
-    const add = address["CertModule#Cert"];
-    const signer =  await provider.getSigner();
-    console.log(signer);
+    const certId = document.getElementById("certId").value
+    console.log("Certificate Id",certId);
     
-    
-    const instance = new Contract(add,ABI,signer);
-    console.log(instance);
+     const provider =await  new BrowserProvider(window.ethereum)
+    console.log("Provider",provider);
+    const signer = await provider.getSigner();
+    console.log("Signer",signer.address);
 
-     const txValue = await instance.Certificates(queryId);
-     console.log(txValue);
-     
-     if(txValue){
-      setOutput(`Name:${txValue[0]},Course:${txValue[1]},Grade:${txValue[2]},Date:${txValue[3]}`)
-     }
+    console.log("Certificate Details",formData);
+
+    const cInstance = new Contract(cert.address,cert.abi,signer);
+
+    const result = await cInstance.Certificates(certId)
+    console.log("Result",result);
+
+    setOutput(`Certificate Id:${result[0]}, Candidate Name: ${result[1]}, Course: ${result[2]}, Grade: ${result[3]}, Date: ${result[4]}`)
+    
   }
+  
+
   return (
-  <div>
-    <br></br>
-    <input type='button' value='Connect Metamask' onClick={connectMetamask}/>
-    <br>
-    </br>
-    <br />
-    <form onSubmit={handleForm}>
-      <div>
-      <label>ID:</label>
-      <input type='number' id="ID" name="ID" onChange={(e)=>{setFormData((preState)=>({
-                          ...preState,[e.target.name]:e.target.value
-      }))}}></input>
-      </div>
-      <div>
-      <label>Name:</label>
-      <input type='text' id="Name" name="Name" onChange={handleChange} />
-      </div>
-      <div>
-      <label>Course:</label>
-      <input type='text' id="Course" name="Course" onChange={handleChange}/>
-      </div>
-      <div>
-      <label>Grade:</label>
-      <input type='text' id="Grade" name="Grade" onChange={handleChange} />
-      </div>
-      <div>
-      <label>Date:</label>
-      <input type='date' id="Date" name="Date" onChange={handleChange}/>
-      </div>
-      <br />
-      <div>
-      <input type='submit' value='Submit' />
-      <input type='button' value='Reset' onClick={resetForm}/>
-      </div>
-    </form>
-   <br />
-   <br />
+    < div className='m-4'>
     <div>
-      <input type="text" name="queryId"  id="queryId"/>
-      <button onClick={getCertificate}>Get Certificate</button>
+     <input type='button' value='Connect To Metamask' onClick={connectMetamask} className=' border-2 bg-sky-500 rounded-full border-transparent p-3 '/>
     </div>
-    <p>{output}</p>
-  </div>
-  );
+    <div>
+      <p className='font-bold m-4'>Enter Certificate Details</p>
+    
+    <div className='flex'>
+      <p className='mr-2'>Certificate Id:</p>
+      <input type='text' id='cid' name='cid' className='border border-black' onChange={handleChange}/>
+    </div>
+
+     <div className='flex'>
+      <p className='mr-2'>Candidate Name:</p>
+      <input type='text' id='cname' name='cname' className='border border-black' onChange={handleChange}/>
+    </div>
+
+     <div className='flex'>
+      <p className='mr-2'>Course:</p>
+      <input type='text' id='course' name='course' className='border border-black' onChange={handleChange}/>
+    </div>
+
+      <div className='flex'>
+      <p className='mr-2'>Grade:</p>
+      <input type='text' id='grade' name='grade' className='border border-black' onChange={handleChange} />
+    </div>
+
+      <div className='flex'>
+      <p className='mr-2'>Date:</p>
+      <input type='date' id='date' name='date' className='border border-black' onChange={handleChange} />
+    </div>
+
+    <div className='m-4'>
+      <input type='button' className=' border-2 bg-sky-500 rounded-full border-transparent p-3 ' onClick={IssueCertificate} value='Issue Certificate'/>
+    </div>
+
+    </div>
+
+    <div>
+      <div>
+        <p className='font-bold m-4'>Certificate Details</p>
+      </div>
+      <div className='flex'>
+        <p>Certificate Id:</p>
+        <input type='text' id='certId' name='certId'className='border border-black'/>
+      </div>
+      <div>
+        <input type='button' value='Get Certificate' className=' border-2 bg-sky-500 rounded-full border-transparent p-3 ' onClick={getCertificate}/>
+      </div>
+      <div>
+        <p>{output}</p>
+      </div>
+    </div>
+    </div>
+  )
 }
 
-export default App;
+export default App
