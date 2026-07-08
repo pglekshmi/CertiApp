@@ -25,6 +25,13 @@ npx hardhat compile
 npx hardhat ignition deploy ./ignition/modules/Cert.ts --network hoodi
 ```
 
+## Starting React Project
+```
+npm create vite@latest CertReact
+```
+
+
+
 --Go to React folder
 
 ```
