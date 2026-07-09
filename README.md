@@ -40,5 +40,5 @@ npm i
 Start React
 
 ```
-npm start
+npm run dev
 ```
