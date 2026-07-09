@@ -3,7 +3,7 @@ import {BrowserProvider, Contract}  from 'ethers'
 
 import './App.css'
 
-import cert from './cert.json'
+import cert from './Cert.json'
 
 function App() {
 
